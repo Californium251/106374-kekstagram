@@ -1,7 +1,8 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Максим](https://up.htmlacademy.ru/javascript/8/user/106374).
-* Наставник: `Неизвестно`.
+* Наставник: [Марина Милитенко]
+(https://htmlacademy.ru/profile/id227898)
 
 ---
 
