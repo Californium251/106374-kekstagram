@@ -31,10 +31,10 @@ var filterList = getListOfFilters(filters);
 //функция, которая изменяет значение окошка с масштабом
 function changeScaleValue(valueField, opsType, min, max, step) {
   var numericFieldValue = parseInt(valueField.value);
-  if ((opsType === 'dec') && (numericFieldValue - step >= min)) {
+  if (opsType === 'dec' && (numericFieldValue - step) >= min) {
     valueField.value = (numericFieldValue - step) + '%';
   }
-  if ((opsType === 'inc') && (numericFieldValue + step <= max)) {
+  if (opsType === 'inc' && (numericFieldValue + step) <= max) {
     valueField.value = (numericFieldValue + step) + '%';
   }
 }
