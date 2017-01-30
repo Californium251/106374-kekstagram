@@ -40,23 +40,23 @@ function changeScaleValue(valueField, opsType, min, max, step) {
 }
 
 //функция, изменяющая масштаб фото
-function changeScale (photo, scaleVal) {
+function changeScale(photo, scaleVal) {
   photo.style.transform = 'scale(' + parseInt(scaleVal) / 100 + ')';
 }
 
 //функция, которая используется, чтобы скрыть одну форму и показать другую
-function showAndHide (whatToBeShown, whatToBeHidden) {
+function showAndHide(whatToBeShown, whatToBeHidden) {
   whatToBeShown.classList.remove('invisible');
   whatToBeHidden.classList.add('invisible');
 }
 
 //функция, чтобы получить значение стиля из input'а
-function getFilterClass (htmlNode) {
+function getFilterClass(htmlNode) {
   return FILTER_PREFIX + htmlNode.value;
 }
 
 //функция, которая получает список стилей, чтобы далее снять их у фото, прежде чем добавлять очередной
-function getListOfFilters (filters) {
+function getListOfFilters(filters) {
   var filtersArr = [];
   for (var i = 0; i < filters.length; i++) {
     filtersArr.push(getFilterClass(filters[i]));
@@ -65,7 +65,7 @@ function getListOfFilters (filters) {
 }
 
 //функция, которая непосредственно переключает фильтр
-function changeFilter (filterName, filterList, mainPhoto) {
+function changeFilter(filterName, filterList, mainPhoto) {
   for (var i = 0; i < filterList.length; i++) {
     if (mainPhoto.classList.contains(filterList[i])) {
       mainPhoto.classList.remove(filterList[i]);
@@ -75,7 +75,7 @@ function changeFilter (filterName, filterList, mainPhoto) {
 }
 
 uploadPhotoInput.addEventListener('change', function() {
-  showAndHide(uploadOverlay, uploadForm)
+  showAndHide(uploadOverlay, uploadForm);
 });
 
 uploadFormCancel.addEventListener('click', function() {
@@ -85,7 +85,7 @@ uploadFormCancel.addEventListener('click', function() {
 
 for (var i = 0; i < filters.length; i++) {
   filters[i].addEventListener('click', function(evt) {
-    changeFilter(getFilterClass(evt.target), filterList, photoPreview)
+    changeFilter(getFilterClass(evt.target), filterList, photoPreview);
   })
 }
 
