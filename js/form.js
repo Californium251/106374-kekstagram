@@ -13,7 +13,7 @@ var filters = document.querySelectorAll('[name = upload-filter]');
 var photoPreview = document.querySelector('img.filter-image-preview');
 var scaleField = {
   htmlNode: document.querySelector('fieldset.upload-resize-controls'),
-  buttons: function () {
+  buttons: function() {
     return this.htmlNode.querySelectorAll('button.upload-resize-control');
   },
   valueWindow: function() {
@@ -86,7 +86,7 @@ uploadFormCancel.addEventListener('click', function() {
 for (var i = 0; i < filters.length; i++) {
   filters[i].addEventListener('click', function(evt) {
     changeFilter(getFilterClass(evt.target), filterList, photoPreview);
-  })
+  });
 }
 
 for (var i = 0; i < scaleField.buttons().length; i++) {
@@ -94,5 +94,5 @@ for (var i = 0; i < scaleField.buttons().length; i++) {
     var decOrInc = evt.target.classList.contains('upload-resize-controls-button-dec') ? 'dec' : 'inc';
     changeScaleValue(scaleField.valueWindow(), decOrInc, scaleField.restrictions.min, scaleField.restrictions.max, scaleField.restrictions.step);
     changeScale(photoPreview, scaleField.valueWindow().value);
-  })
+  });
 }
