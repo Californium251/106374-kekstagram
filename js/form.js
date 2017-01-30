@@ -4,7 +4,7 @@
 'use strict';
 
 //Объявляем переменные
-
+var FILTER_PREFIX = 'filter-';
 var uploadForm = document.querySelector('.upload-form');
 var uploadPhotoInput = document.getElementById('upload-file');
 var uploadOverlay = document.querySelector('.upload-overlay');
@@ -26,13 +26,16 @@ var scaleField = {
   }
 };
 
+var filterList = getListOfFilters(filters);
+
 //функция, которая изменяет значение окошка с масштабом
 function changeScaleValue(valueField, opsType, min, max, step) {
-  if ((opsType === 'dec') && (parseInt(valueField.value) - 25 >= min)) {
-    valueField.value = (parseInt(valueField.value) - step) + '%';
+  var numericFieldValue = parseInt(valueField.value);
+  if ((opsType === 'dec') && (numericFieldValue - step >= min)) {
+    valueField.value = (numericFieldValue - step) + '%';
   }
-  if ((opsType === 'inc') && (parseInt(valueField.value) + 25 <= max)) {
-    valueField.value = (parseInt(valueField.value) + step) + '%';
+  if ((opsType === 'inc') && (numericFieldValue + step <= max)) {
+    valueField.value = (numericFieldValue + step) + '%';
   }
 }
 
@@ -49,7 +52,7 @@ function showAndHide (whatToBeShown, whatToBeHidden) {
 
 //функция, чтобы получить значение стиля из input'а
 function getFilterClass (htmlNode) {
-  return 'filter-' + htmlNode.value;
+  return FILTER_PREFIX + htmlNode.value;
 }
 
 //функция, которая получает список стилей, чтобы далее снять их у фото, прежде чем добавлять очередной
@@ -82,7 +85,7 @@ uploadFormCancel.addEventListener('click', function() {
 
 for (var i = 0; i < filters.length; i++) {
   filters[i].addEventListener('click', function(evt) {
-    changeFilter(getFilterClass(evt.target), getListOfFilters(filters), photoPreview)
+    changeFilter(getFilterClass(evt.target), filterList, photoPreview)
   })
 }
 
