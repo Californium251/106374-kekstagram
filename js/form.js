@@ -4,12 +4,17 @@
 'use strict';
 
 //Объявляем переменные
+var ENTER_KEY_CODE = 13;
 var FILTER_PREFIX = 'filter-';
 var uploadForm = document.querySelector('.upload-form');
 var uploadPhotoInput = document.getElementById('upload-file');
 var uploadOverlay = document.querySelector('.upload-overlay');
 var uploadFormCancel = uploadOverlay.querySelector('.upload-form-cancel');
-var filters = document.querySelectorAll('[name = upload-filter]');
+var allFilters = document.querySelector('.upload-filter-controls');
+var filters = {
+  inputs: document.querySelectorAll('[name = upload-filter]'),
+  labels: document.querySelectorAll('.upload-filter-label')
+};
 var photoPreview = document.querySelector('img.filter-image-preview');
 var scaleField = {
   htmlNode: document.querySelector('fieldset.upload-resize-controls'),
@@ -26,7 +31,8 @@ var scaleField = {
   }
 };
 
-var filterList = getListOfFilters(filters);
+var filterList = getListOfFilters(filters.inputs);
+var filterLabelList = getListOfFilters(filters.labels);
 
 //функция, которая изменяет значение окошка с масштабом
 function changeScaleValue(valueField, opsType, min, max, step) {
@@ -52,7 +58,13 @@ function showAndHide(whatToBeShown, whatToBeHidden) {
 
 //функция, чтобы получить значение стиля из input'а
 function getFilterClass(htmlNode) {
-  return FILTER_PREFIX + htmlNode.value;
+  if (htmlNode.tagName === 'INPUT') {
+    return FILTER_PREFIX + htmlNode.value;
+  }
+  if (htmlNode.tagName === 'LABEL') {
+    var appropriateInput = document.getElementById(htmlNode.getAttribute('FOR'));
+    return FILTER_PREFIX + appropriateInput.value;
+  }
 }
 
 //функция, которая получает список стилей, чтобы далее снять их у фото, прежде чем добавлять очередной
@@ -74,6 +86,12 @@ function changeFilter(filterName, filterList, mainPhoto) {
   }
 }
 
+//функция проверки кода кнопки
+function checkPressedKey(evtKey, properKey) {
+  if (evtKey === properKey) return true;
+  else return false;
+}
+
 uploadPhotoInput.addEventListener('change', function() {
   showAndHide(uploadOverlay, uploadForm);
 });
@@ -83,16 +101,37 @@ uploadFormCancel.addEventListener('click', function() {
   showAndHide(uploadForm, uploadOverlay);
 });
 
-for (var i = 0; i < filters.length; i++) {
-  filters[i].addEventListener('click', function(evt) {
-    changeFilter(getFilterClass(evt.target), filterList, photoPreview);
+// for (var i = 0; i < filters.inputs.length; i++) {
+//   filters.inputs[i].addEventListener('click', function(evt) {
+//     changeFilter(getFilterClass(evt.target), filterList, photoPreview);
+//   });
+// }
+
+for (var i = 0; i < filters.labels.length; i++) {
+  filters.labels[i].addEventListener('keydown', function(evt) {
+    if (checkPressedKey(evt.keyCode, ENTER_KEY_CODE)) {
+      changeFilter(getFilterClass(evt.target), filterLabelList, photoPreview);
+    }
   });
 }
+
+allFilters.addEventListener('click', function(evt) {
+  if (evt.target.tagName === 'INPUT') {
+    changeFilter(getFilterClass(evt.target), filterList, photoPreview)
+  }
+});
 
 for (var i = 0; i < scaleField.buttons().length; i++) {
   scaleField.buttons()[i].addEventListener('click', function(evt) {
     var decOrInc = evt.target.classList.contains('upload-resize-controls-button-dec') ? 'dec' : 'inc';
     changeScaleValue(scaleField.valueWindow(), decOrInc, scaleField.restrictions.min, scaleField.restrictions.max, scaleField.restrictions.step);
     changeScale(photoPreview, scaleField.valueWindow().value);
+  });
+  scaleField.buttons()[i].addEventListener('keydown', function(evt) {
+    if (checkPressedKey(evt.keyCode, ENTER_KEY_CODE)) {
+      var decOrInc = evt.target.classList.contains('upload-resize-controls-button-dec') ? 'dec' : 'inc';
+      changeScaleValue(scaleField.valueWindow(), decOrInc, scaleField.restrictions.min, scaleField.restrictions.max, scaleField.restrictions.step);
+      changeScale(photoPreview, scaleField.valueWindow().value);
+    } //ПОЧЕМУ МАСШТАБ МЕНЯЕТСЯ С ДРУГИМ ШАГОМ??!???!?!
   });
 }
