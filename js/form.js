@@ -101,37 +101,22 @@ uploadFormCancel.addEventListener('click', function() {
   showAndHide(uploadForm, uploadOverlay);
 });
 
-// for (var i = 0; i < filters.inputs.length; i++) {
-//   filters.inputs[i].addEventListener('click', function(evt) {
-//     changeFilter(getFilterClass(evt.target), filterList, photoPreview);
-//   });
-// }
-
-for (var i = 0; i < filters.labels.length; i++) {
-  filters.labels[i].addEventListener('keydown', function(evt) {
-    if (checkPressedKey(evt.keyCode, ENTER_KEY_CODE)) {
-      changeFilter(getFilterClass(evt.target), filterLabelList, photoPreview);
-    }
-  });
-}
-
 allFilters.addEventListener('click', function(evt) {
   if (evt.target.tagName === 'INPUT') {
     changeFilter(getFilterClass(evt.target), filterList, photoPreview)
   }
 });
 
-for (var i = 0; i < scaleField.buttons().length; i++) {
-  scaleField.buttons()[i].addEventListener('click', function(evt) {
+allFilters.addEventListener('keydown', function(evt) {
+  if (checkPressedKey(evt.target, ENTER_KEY_CODE)) {
+    changeFilter(getFilterClass(evt.target), filterList, photoPreview)
+  }
+});
+
+scaleField.htmlNode.addEventListener('click', function (evt) {
+  if (evt.target.tagName === 'BUTTON') {
     var decOrInc = evt.target.classList.contains('upload-resize-controls-button-dec') ? 'dec' : 'inc';
     changeScaleValue(scaleField.valueWindow(), decOrInc, scaleField.restrictions.min, scaleField.restrictions.max, scaleField.restrictions.step);
     changeScale(photoPreview, scaleField.valueWindow().value);
-  });
-  scaleField.buttons()[i].addEventListener('keydown', function(evt) {
-    if (checkPressedKey(evt.keyCode, ENTER_KEY_CODE)) {
-      var decOrInc = evt.target.classList.contains('upload-resize-controls-button-dec') ? 'dec' : 'inc';
-      changeScaleValue(scaleField.valueWindow(), decOrInc, scaleField.restrictions.min, scaleField.restrictions.max, scaleField.restrictions.step);
-      changeScale(photoPreview, scaleField.valueWindow().value);
-    } //ПОЧЕМУ МАСШТАБ МЕНЯЕТСЯ С ДРУГИМ ШАГОМ??!???!?!
-  });
-}
+  }
+});
