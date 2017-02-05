@@ -32,7 +32,6 @@ var scaleField = {
 };
 
 var filterList = getListOfFilters(filters.inputs);
-var filterLabelList = getListOfFilters(filters.labels);
 
 //функция, которая изменяет значение окошка с масштабом
 function changeScaleValue(valueField, opsType, min, max, step) {
@@ -43,6 +42,11 @@ function changeScaleValue(valueField, opsType, min, max, step) {
   if (opsType === 'inc' && (numericFieldValue + step) <= max) {
     valueField.value = (numericFieldValue + step) + '%';
   }
+}
+
+function checkTagName(tagName, properTagName) {
+  if (tagName === properTagName) return true;
+  else return false
 }
 
 //функция, изменяющая масштаб фото
@@ -58,10 +62,10 @@ function showAndHide(whatToBeShown, whatToBeHidden) {
 
 //функция, чтобы получить значение стиля из input'а
 function getFilterClass(htmlNode) {
-  if (htmlNode.tagName === 'INPUT') {
+  if (checkTagName(htmlNode.tagName, 'INPUT')) {
     return FILTER_PREFIX + htmlNode.value;
   }
-  if (htmlNode.tagName === 'LABEL') {
+  if (checkTagName(htmlNode.tagName, 'LABEL')) {
     var appropriateInput = document.getElementById(htmlNode.getAttribute('FOR'));
     return FILTER_PREFIX + appropriateInput.value;
   }
@@ -102,7 +106,7 @@ uploadFormCancel.addEventListener('click', function() {
 });
 
 allFilters.addEventListener('click', function(evt) {
-  if (evt.target.tagName === 'INPUT') {
+  if (checkTagName(htmlNode.tagName, 'INPUT')) {
     changeFilter(getFilterClass(evt.target), filterList, photoPreview)
   }
 });
@@ -114,7 +118,7 @@ allFilters.addEventListener('keydown', function(evt) {
 });
 
 scaleField.htmlNode.addEventListener('click', function (evt) {
-  if (evt.target.tagName === 'BUTTON') {
+  if (checkTagName(htmlNode.tagName, 'BUTTON')) {
     var decOrInc = evt.target.classList.contains('upload-resize-controls-button-dec') ? 'dec' : 'inc';
     changeScaleValue(scaleField.valueWindow(), decOrInc, scaleField.restrictions.min, scaleField.restrictions.max, scaleField.restrictions.step);
     changeScale(photoPreview, scaleField.valueWindow().value);
