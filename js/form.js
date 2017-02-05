@@ -18,9 +18,6 @@ var filters = {
 var photoPreview = document.querySelector('img.filter-image-preview');
 var scaleField = {
   htmlNode: document.querySelector('fieldset.upload-resize-controls'),
-  buttons: function() {
-    return this.htmlNode.querySelectorAll('button.upload-resize-control');
-  },
   valueWindow: function() {
     return this.htmlNode.querySelector('.upload-resize-controls-value');
   },
