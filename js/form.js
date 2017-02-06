@@ -3,34 +3,30 @@
  */
 'use strict';
 
-//Объявляем переменные
+var ENTER_KEY_CODE = 13;
 var FILTER_PREFIX = 'filter-';
 var uploadForm = document.querySelector('.upload-form');
 var uploadPhotoInput = document.getElementById('upload-file');
 var uploadOverlay = document.querySelector('.upload-overlay');
 var uploadFormCancel = uploadOverlay.querySelector('.upload-form-cancel');
-var filters = document.querySelectorAll('[name = upload-filter]');
+var allFilters = document.querySelector('.upload-filter-controls');
+var filters = {
+  inputs: document.querySelectorAll('[name = upload-filter]'),
+  labels: document.querySelectorAll('.upload-filter-label')
+};
 var photoPreview = document.querySelector('img.filter-image-preview');
-var scaleField = {
-  htmlNode: document.querySelector('fieldset.upload-resize-controls'),
-  buttons: function() {
-    return this.htmlNode.querySelectorAll('button.upload-resize-control');
-  },
-  valueWindow: function() {
-    return this.htmlNode.querySelector('.upload-resize-controls-value');
-  },
-  restrictions: {
-    min: 0,
-    max: 100,
-    step: 25
-  }
+var scaleField = document.querySelector('fieldset.upload-resize-controls');
+var scaleValueWindow = scaleField.querySelector('.upload-resize-controls-value');
+var restrictions = {
+  min: 0,
+  max: 100,
+  step: 25
 };
 
-var filterList = getListOfFilters(filters);
+var filterList = getListOfFilters(filters.inputs);
 
-//функция, которая изменяет значение окошка с масштабом
 function changeScaleValue(valueField, opsType, min, max, step) {
-  var numericFieldValue = parseInt(valueField.value);
+  var numericFieldValue = parseInt(valueField.value, 10);
   if (opsType === 'dec' && (numericFieldValue - step) >= min) {
     valueField.value = (numericFieldValue - step) + '%';
   }
@@ -39,60 +35,75 @@ function changeScaleValue(valueField, opsType, min, max, step) {
   }
 }
 
-//функция, изменяющая масштаб фото
-function changeScale(photo, scaleVal) {
-  photo.style.transform = 'scale(' + parseInt(scaleVal) / 100 + ')';
+function isEqual(param1, param2) {
+  return param1 === param2;
 }
 
-//функция, которая используется, чтобы скрыть одну форму и показать другую
+function changeScale(photo, scaleVal) {
+  photo.style.transform = 'scale(' + parseInt(scaleVal, 10) / 100 + ')';
+}
+
 function showAndHide(whatToBeShown, whatToBeHidden) {
   whatToBeShown.classList.remove('invisible');
   whatToBeHidden.classList.add('invisible');
 }
 
-//функция, чтобы получить значение стиля из input'а
 function getFilterClass(htmlNode) {
-  return FILTER_PREFIX + htmlNode.value;
+  var whatToBeReturned = '';
+  if (isEqual(htmlNode.tagName, 'INPUT')) {
+    whatToBeReturned = FILTER_PREFIX + htmlNode.value;
+  }
+  if (isEqual(htmlNode.tagName, 'LABEL')) {
+    var appropriateInput = document.getElementById(htmlNode.getAttribute('FOR'));
+    whatToBeReturned = FILTER_PREFIX + appropriateInput.value;
+  }
+  return whatToBeReturned;
 }
 
-//функция, которая получает список стилей, чтобы далее снять их у фото, прежде чем добавлять очередной
-function getListOfFilters(filters) {
+function getListOfFilters(filtersToBeListed) {
   var filtersArr = [];
-  for (var i = 0; i < filters.length; i++) {
-    filtersArr.push(getFilterClass(filters[i]));
+  for (var i = 0; i < filtersToBeListed.length; i++) {
+    filtersArr.push(getFilterClass(filtersToBeListed[i]));
   }
   return filtersArr;
 }
 
-//функция, которая непосредственно переключает фильтр
-function changeFilter(filterName, filterList, mainPhoto) {
-  for (var i = 0; i < filterList.length; i++) {
-    if (mainPhoto.classList.contains(filterList[i])) {
-      mainPhoto.classList.remove(filterList[i]);
+function changeFilter(filterName, listOfFilters, mainPhoto, selectedFilter, filtersInputs) {
+  for (var i = 0; i < listOfFilters.length; i++) {
+    if (mainPhoto.classList.contains(listOfFilters[i])) {
+      mainPhoto.classList.remove(listOfFilters[i]);
     }
     mainPhoto.classList.add(filterName);
+    filtersInputs[i].setAttribute('aria-pressed', 'false');
   }
+  selectedFilter.setAttribute('aria-pressed', 'true');
 }
 
-uploadPhotoInput.addEventListener('change', function() {
+uploadPhotoInput.addEventListener('change', function () {
   showAndHide(uploadOverlay, uploadForm);
 });
 
-uploadFormCancel.addEventListener('click', function() {
-  uploadPhotoInput.value = "";
+uploadFormCancel.addEventListener('click', function () {
+  uploadPhotoInput.value = '';
   showAndHide(uploadForm, uploadOverlay);
 });
 
-for (var i = 0; i < filters.length; i++) {
-  filters[i].addEventListener('click', function(evt) {
-    changeFilter(getFilterClass(evt.target), filterList, photoPreview);
-  });
-}
+allFilters.addEventListener('click', function (evt) {
+  if (isEqual(evt.target.tagName, 'INPUT')) {
+    changeFilter(getFilterClass(evt.target), filterList, photoPreview, evt.target, filters.inputs);
+  }
+});
 
-for (var i = 0; i < scaleField.buttons().length; i++) {
-  scaleField.buttons()[i].addEventListener('click', function(evt) {
+allFilters.addEventListener('keydown', function (evt) {
+  if (isEqual(evt.keyCode, ENTER_KEY_CODE)) {
+    changeFilter(getFilterClass(evt.target), filterList, photoPreview, evt.target, filters.inputs);
+  }
+});
+
+scaleField.addEventListener('click', function (evt) {
+  if (isEqual(evt.target.tagName, 'BUTTON')) {
     var decOrInc = evt.target.classList.contains('upload-resize-controls-button-dec') ? 'dec' : 'inc';
-    changeScaleValue(scaleField.valueWindow(), decOrInc, scaleField.restrictions.min, scaleField.restrictions.max, scaleField.restrictions.step);
-    changeScale(photoPreview, scaleField.valueWindow().value);
-  });
-}
+    changeScaleValue(scaleValueWindow, decOrInc, restrictions.min, restrictions.max, restrictions.step);
+    changeScale(photoPreview, scaleValueWindow.value);
+  }
+});
