@@ -103,19 +103,19 @@ uploadFormCancel.addEventListener('click', function() {
 });
 
 allFilters.addEventListener('click', function(evt) {
-  if (checkTagName(htmlNode.tagName, 'INPUT')) {
+  if (checkTagName(evt.target.tagName, 'INPUT')) {
     changeFilter(getFilterClass(evt.target), filterList, photoPreview)
   }
 });
 
 allFilters.addEventListener('keydown', function(evt) {
-  if (checkPressedKey(evt.target, ENTER_KEY_CODE)) {
+  if (checkPressedKey(evt.keyCode, ENTER_KEY_CODE)) {
     changeFilter(getFilterClass(evt.target), filterList, photoPreview)
   }
 });
 
 scaleField.htmlNode.addEventListener('click', function (evt) {
-  if (checkTagName(htmlNode.tagName, 'BUTTON')) {
+  if (checkTagName(evt.target.tagName, 'BUTTON')) {
     var decOrInc = evt.target.classList.contains('upload-resize-controls-button-dec') ? 'dec' : 'inc';
     changeScaleValue(scaleField.valueWindow(), decOrInc, scaleField.restrictions.min, scaleField.restrictions.max, scaleField.restrictions.step);
     changeScale(photoPreview, scaleField.valueWindow().value);
