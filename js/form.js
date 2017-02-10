@@ -26,4 +26,4 @@ uploadFormCancel.addEventListener('click', function () {
 });
 
 window.initializeFlters(allFilters, photoPreview);
-window.initializeScale(scaleField, photoPreview);
+window.createScale(scaleField, photoPreview);
