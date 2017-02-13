@@ -26,7 +26,7 @@ window.createScale = (function () {
     mainPhoto.style.transform = 'scale(' + parseInt(scaleValue.value, 10) / 100 + ')';
   }
 
-  function listenerFunction(evt, photoElem, scaleValue, conditions) {
+  function addListeners(evt, photoElem, scaleValue, conditions) {
     if (evt.target.tagName === 'BUTTON') {
       changeScale(getScaleBtnType(evt.target), photoElem, scaleValue, conditions);
     }
@@ -34,7 +34,7 @@ window.createScale = (function () {
 
   return function (scaleField, photoPreview) {
     scaleField.addEventListener('click', function (evt) {
-      listenerFunction(evt, photoPreview, scaleVal, restrinctions);
+      addListeners(evt, photoPreview, scaleVal, restrinctions);
     });
   };
 })();
