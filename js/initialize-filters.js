@@ -51,7 +51,6 @@ window.initializeFlters = (function () {
   function changeFilterOnKeyDown(evt, filterPath, photoElement) {
     if (evt.target.tagName === 'LABEL' && evt.keyCode === ENTER_KEY_CODE) {
       removeAndSetNewFilter(evt, filterPath, photoElement);
-      removeAndSetNewFilter(evt, filterPath, photoElement);
     }
   }
 
