@@ -3,7 +3,7 @@
  */
 'use strict';
 
-window.form = (function () {
+(function () {
   var uploadForm = document.querySelector('.upload-form');
   var uploadPhotoInput = document.getElementById('upload-file');
   var uploadOverlay = document.querySelector('.upload-overlay');
@@ -29,4 +29,3 @@ window.form = (function () {
   window.initializeFlters(allFilters, photoPreview);
   window.createScale(scaleField, photoPreview);
 })();
-
