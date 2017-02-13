@@ -4,7 +4,7 @@
 
 'use strict';
 
-window.createScale = function (scaleField, photoElem) {
+window.createScale = (function () {
   var scaleVal = document.querySelector('.upload-resize-controls-value');
   var restrinctions = {
     min: 0,
@@ -25,9 +25,16 @@ window.createScale = function (scaleField, photoElem) {
     }
     mainPhoto.style.transform = 'scale(' + parseInt(scaleValue.value, 10) / 100 + ')';
   }
-  scaleField.addEventListener('click', function (evt) {
+
+  function addListeners(evt, photoElem, scaleValue, conditions) {
     if (evt.target.tagName === 'BUTTON') {
-      changeScale(getScaleBtnType(evt.target), photoElem, scaleVal, restrinctions);
+      changeScale(getScaleBtnType(evt.target), photoElem, scaleValue, conditions);
     }
-  });
-};
+  }
+
+  return function (scaleField, photoPreview) {
+    scaleField.addEventListener('click', function (evt) {
+      addListeners(evt, photoPreview, scaleVal, restrinctions);
+    });
+  };
+})();

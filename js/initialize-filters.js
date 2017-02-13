@@ -3,7 +3,7 @@
  */
 'use strict';
 
-window.initializeFlters = function (filterPath, photoElement) {
+window.initializeFlters = (function () {
   var ENTER_KEY_CODE = 13;
   function getFilterList(filterNode) {
     var filterNodes = filterNode.querySelectorAll('input');
@@ -37,17 +37,29 @@ window.initializeFlters = function (filterPath, photoElement) {
     photoElem.classList.add(getFilterClass(chosenFilter));
   }
 
-  filterPath.addEventListener('click', function (evt) {
-    if (evt.target.tagName === 'INPUT') {
-      removeAllFilters(getFilterList(filterPath), photoElement);
-      setChosenFilter(evt.target, photoElement);
-    }
-  });
+  function removeAndSetNewFilter(evt, filterPath, photoElement) {
+    removeAllFilters(getFilterList(filterPath), photoElement);
+    setChosenFilter(evt.target, photoElement);
+  }
 
-  filterPath.addEventListener('keydown', function (evt) {
-    if (evt.target.tagName === 'LABEL' && evt.keyCode === ENTER_KEY_CODE) {
-      removeAllFilters(getFilterList(filterPath), photoElement);
-      setChosenFilter(evt.target, photoElement);
+  function changeFilterOnClick(evt, filterPath, photoElement) {
+    if (evt.target.tagName === 'INPUT') {
+      removeAndSetNewFilter(evt, filterPath, photoElement);
     }
-  });
-};
+  }
+
+  function changeFilterOnKeyDown(evt, filterPath, photoElement) {
+    if (evt.target.tagName === 'LABEL' && evt.keyCode === ENTER_KEY_CODE) {
+      removeAndSetNewFilter(evt, filterPath, photoElement);
+    }
+  }
+
+  return function (filterPath, photoElement) {
+    filterPath.addEventListener('click', function (evt) {
+      changeFilterOnClick(evt, filterPath, photoElement);
+    });
+    filterPath.addEventListener('keydown', function (evt) {
+      changeFilterOnKeyDown(evt, filterPath, photoElement);
+    });
+  };
+})();
