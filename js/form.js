@@ -13,14 +13,14 @@
   var scaleField = document.querySelector('fieldset.upload-resize-controls');
   var changeFormBtn = document.querySelector('label.upload-file');
 
-  function showAndHide(whatToBeShown, whatToBeHidden) {
+  function showAndHide(whatToBeShown, whatToBeHidden, callback) {
     whatToBeShown.classList.remove('invisible');
     whatToBeHidden.classList.add('invisible');
-    if (whatToBeShown === uploadForm && window.activeElement) {
-      window.activeElement.focus();
+    if (typeof callback === 'function') {
+      callback();
     }
   }
-//Все это какой-то жуткий костыль, откровенно говоря. Но все работает (хоть и без колбэков)
+
   changeFormBtn.addEventListener('keydown', function (evt) {
     if (evt.keyCode === 13) {
       window.activeElement = document.activeElement;
@@ -34,7 +34,13 @@
 
   uploadFormCancel.addEventListener('click', function () {
     uploadPhotoInput.value = '';
-    showAndHide(uploadForm, uploadOverlay);
+    function callback() {
+      if (window.activeElement) {
+        window.activeElement.focus();
+        window.activeElement = null;
+      }
+    }
+    showAndHide(uploadForm, uploadOverlay, callback);
   });
 
   function setNewFilter(targetFilter) {
