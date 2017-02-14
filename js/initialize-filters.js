@@ -33,33 +33,31 @@ window.initializeFlters = (function () {
     }
   }
 
-  function setChosenFilter(chosenFilter, photoElem) {
-    photoElem.classList.add(getFilterClass(chosenFilter));
-  }
-
-  function removeAndSetNewFilter(evt, filterPath, photoElement) {
+  function removeAndSetNewFilter(evt, filterPath, photoElement, callback) {
     removeAllFilters(getFilterList(filterPath), photoElement);
-    setChosenFilter(evt.target, photoElement);
+    if (typeof callback === 'function') {
+      callback(getFilterClass(evt.target));
+    }
   }
 
-  function changeFilterOnClick(evt, filterPath, photoElement) {
+  function changeFilterOnClick(evt, filterPath, photoElement, callback) {
     if (evt.target.tagName === 'INPUT') {
-      removeAndSetNewFilter(evt, filterPath, photoElement);
+      removeAndSetNewFilter(evt, filterPath, photoElement, callback);
     }
   }
 
-  function changeFilterOnKeyDown(evt, filterPath, photoElement) {
+  function changeFilterOnKeyDown(evt, filterPath, photoElement, callback) {
     if (evt.target.tagName === 'LABEL' && evt.keyCode === ENTER_KEY_CODE) {
-      removeAndSetNewFilter(evt, filterPath, photoElement);
+      removeAndSetNewFilter(evt, filterPath, photoElement, callback);
     }
   }
 
-  return function (filterPath, photoElement) {
+  return function (filterPath, photoElement, callback) {
     filterPath.addEventListener('click', function (evt) {
-      changeFilterOnClick(evt, filterPath, photoElement);
+      changeFilterOnClick(evt, filterPath, photoElement, callback);
     });
     filterPath.addEventListener('keydown', function (evt) {
-      changeFilterOnKeyDown(evt, filterPath, photoElement);
+      changeFilterOnKeyDown(evt, filterPath, photoElement, callback);
     });
   };
 })();

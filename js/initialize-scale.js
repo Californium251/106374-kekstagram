@@ -16,25 +16,24 @@ window.createScale = (function () {
     return btn.classList.contains('upload-resize-controls-button-inc') ? 'inc' : 'dec';
   }
 
-  function changeScale(btnType, mainPhoto, scaleValue, minMaxAndStep) {
+  function changeScale(btnType, scaleValue, minMaxAndStep) {
     if (btnType === 'inc' && parseInt(scaleValue.value, 10) < minMaxAndStep.max) {
       scaleVal.value = (parseInt(scaleValue.value, 10) + minMaxAndStep.step) + '%';
     }
     if (btnType === 'dec' && parseInt(scaleValue.value, 10) > minMaxAndStep.min) {
       scaleVal.value = (parseInt(scaleValue.value, 10) - minMaxAndStep.step) + '%';
     }
-    mainPhoto.style.transform = 'scale(' + parseInt(scaleValue.value, 10) / 100 + ')';
   }
 
-  function addListeners(evt, photoElem, scaleValue, conditions) {
-    if (evt.target.tagName === 'BUTTON') {
-      changeScale(getScaleBtnType(evt.target), photoElem, scaleValue, conditions);
-    }
-  }
-
-  return function (scaleField, photoPreview) {
+  return function (scaleField, photoPreview, callback) {
     scaleField.addEventListener('click', function (evt) {
-      addListeners(evt, photoPreview, scaleVal, restrinctions);
+      if (evt.target.tagName === 'BUTTON') {
+        changeScale(getScaleBtnType(evt.target), scaleVal, restrinctions);
+        if (typeof callback === 'function') {
+          var parsedScale = parseInt(scaleVal.value, 10) / 100;
+          callback(parsedScale);
+        }
+      }
     });
   };
 })();
