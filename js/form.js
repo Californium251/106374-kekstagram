@@ -12,6 +12,8 @@
   var photoPreview = document.querySelector('img.filter-image-preview');
   var scaleField = document.querySelector('fieldset.upload-resize-controls');
   var changeFormBtn = document.querySelector('label.upload-file');
+  var ENTER_KEY_CODE = 13;
+  var activeElement;
 
   function showAndHide(whatToBeShown, whatToBeHidden, callback) {
     whatToBeShown.classList.remove('invisible');
@@ -22,8 +24,8 @@
   }
 
   changeFormBtn.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === 13) {
-      window.activeElement = document.activeElement;
+    if (evt.keyCode === ENTER_KEY_CODE) {
+      activeElement = document.activeElement;
       changeFormBtn.click();
     }
   });
@@ -35,9 +37,9 @@
   uploadFormCancel.addEventListener('click', function () {
     uploadPhotoInput.value = '';
     function callback() {
-      if (window.activeElement) {
-        window.activeElement.focus();
-        window.activeElement = null;
+      if (activeElement) {
+        activeElement.focus();
+        activeElement = null;
       }
     }
     showAndHide(uploadForm, uploadOverlay, callback);
