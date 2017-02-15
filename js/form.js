@@ -11,11 +11,24 @@
   var allFilters = document.querySelector('.upload-filter-controls');
   var photoPreview = document.querySelector('img.filter-image-preview');
   var scaleField = document.querySelector('fieldset.upload-resize-controls');
+  var changeFormBtn = document.querySelector('label.upload-file');
+  var ENTER_KEY_CODE = 13;
+  var activeElement;
 
-  function showAndHide(whatToBeShown, whatToBeHidden) {
+  function showAndHide(whatToBeShown, whatToBeHidden, callback) {
     whatToBeShown.classList.remove('invisible');
     whatToBeHidden.classList.add('invisible');
+    if (typeof callback === 'function') {
+      callback();
+    }
   }
+
+  changeFormBtn.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_KEY_CODE) {
+      activeElement = document.activeElement;
+      changeFormBtn.click();
+    }
+  });
 
   uploadPhotoInput.addEventListener('change', function () {
     showAndHide(uploadOverlay, uploadForm);
@@ -23,9 +36,23 @@
 
   uploadFormCancel.addEventListener('click', function () {
     uploadPhotoInput.value = '';
-    showAndHide(uploadForm, uploadOverlay);
+    function callback() {
+      if (activeElement) {
+        activeElement.focus();
+        activeElement = null;
+      }
+    }
+    showAndHide(uploadForm, uploadOverlay, callback);
   });
 
-  window.initializeFlters(allFilters, photoPreview);
-  window.createScale(scaleField, photoPreview);
+  function setNewFilter(targetFilter) {
+    photoPreview.classList.add(targetFilter);
+  }
+
+  function setScale(scaleVal) {
+    photoPreview.style.transform = 'scale(' + scaleVal + ')';
+  }
+
+  window.initializeFlters(allFilters, photoPreview, setNewFilter);
+  window.createScale(scaleField, photoPreview, setScale);
 })();
