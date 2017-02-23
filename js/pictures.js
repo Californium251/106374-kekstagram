@@ -9,29 +9,20 @@ var template = document.querySelector('template');
 var templateContent = 'content' in template ? template.content : template;
 var picturesUrl = 'https://intensive-javascript-server-myophkugvq.now.sh/kekstagram/data';
 var onePicture;
-var galleryOverlay = document.querySelector('.gallery-overlay');
-var galleryOverlayImage = galleryOverlay.querySelector('img');
-var galleryComments = galleryOverlay.querySelector('.comments-count');
-var galleryLikes = galleryOverlay.querySelector('.likes-count');
-var galleryCloseBtn = galleryOverlay.querySelector('.gallery-overlay-close');
 
 window.load(picturesUrl, function (evt) {
   var pictures = JSON.parse(evt.target.response);
+
   function addListener(el, i) {
-    function listenerFunction(e) {
+    el.addEventListener('click', function (e) {
       e.preventDefault();
-      galleryOverlay.classList.remove('invisible');
-      galleryCloseBtn.focus();
-      galleryOverlayImage.setAttribute('src', pictures[i].url);
-      galleryComments.innerHTML = pictures[i].comments.length;
-      galleryLikes.innerHTML = pictures[i].likes;
-    }
-    el.addEventListener('keydown', function (event) {
-      if (event.keyCode === ENTER_KEY_CODE) {
-        listenerFunction(event);
-      }
+      window.showGallery(pictures, i);
     });
-    el.addEventListener('click', listenerFunction);
+    el.addEventListener('keydown', function (e) {
+      if (e.keyCode === ENTER_KEY_CODE) {
+        window.showGallery(pictures, i);
+      }
+    })
   }
 
   for (var i = 0; i < pictures.length; i++) {
@@ -44,13 +35,4 @@ window.load(picturesUrl, function (evt) {
     picturesContainer.appendChild(onePicture);
   }
 });
-
-galleryCloseBtn.addEventListener('click', function () {
-  galleryOverlay.classList.add('invisible');
-});
-galleryCloseBtn.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_KEY_CODE) {
-    galleryOverlay.classList.add('invisible');
-  }
-})
 
