@@ -13,6 +13,7 @@ var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryOverlayImage = galleryOverlay.querySelector('img');
 var galleryComments = galleryOverlay.querySelector('.comments-count');
 var galleryLikes = galleryOverlay.querySelector('.likes-count');
+var galleryCloseBtn = galleryOverlay.querySelector('.gallery-overlay-close');
 
 window.load(picturesUrl, function (evt) {
   var pictures = JSON.parse(evt.target.response);
@@ -20,13 +21,14 @@ window.load(picturesUrl, function (evt) {
     function listenerFunction(e) {
       e.preventDefault();
       galleryOverlay.classList.remove('invisible');
+      galleryCloseBtn.focus();
       galleryOverlayImage.setAttribute('src', pictures[i].url);
       galleryComments.innerHTML = pictures[i].comments.length;
       galleryLikes.innerHTML = pictures[i].likes;
     }
-    el.addEventListener('keydown', function(evt) {
-      if (evt.keyCode === ENTER_KEY_CODE) {
-        listenerFunction(evt);
+    el.addEventListener('keydown', function (event) {
+      if (event.keyCode === ENTER_KEY_CODE) {
+        listenerFunction(event);
       }
     });
     el.addEventListener('click', listenerFunction);
@@ -42,4 +44,13 @@ window.load(picturesUrl, function (evt) {
     picturesContainer.appendChild(onePicture);
   }
 });
+
+galleryCloseBtn.addEventListener('click', function () {
+  galleryOverlay.classList.add('invisible');
+});
+galleryCloseBtn.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEY_CODE) {
+    galleryOverlay.classList.add('invisible');
+  }
+})
 
