@@ -4,19 +4,10 @@
 'use strict';
 
 window.load = (function () {
-  var photos = [];
-  return function (url, onload) {
+  return function (url, onLoad) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url);
-    xhr.addEventListener('load', function (evt) {
-      try {
-        photos = JSON.parse(evt.target.response);
-        if (typeof onload === 'function') {
-          onload(photos);
-        }
-      } catch (err) {}
-    });
+    xhr.addEventListener('load', onLoad);
     xhr.send();
-    return photos;
   };
 })();

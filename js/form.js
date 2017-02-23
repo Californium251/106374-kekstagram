@@ -55,5 +55,4 @@
 
   window.initializeFlters(allFilters, photoPreview, setNewFilter);
   window.createScale(scaleField, photoPreview, setScale);
-  window.pictures();
 })();
