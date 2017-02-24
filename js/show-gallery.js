@@ -15,14 +15,16 @@ window.showGallery = (function () {
     galleryImg.setAttribute('src', pictures[i].url);
     galleryLikes.innerHTML = pictures[i].likes;
     galleryComments.innerHTML = pictures[i].comments.length;
-    galleryCloseBtn.focus();
+    setTimeout(function () {
+      galleryCloseBtn.focus();
+    }, 10);
     galleryCloseBtn.addEventListener('click', function () {
       galleryOverlay.classList.add('invisible');
     });
-    galleryCloseBtn.addEventListener('keydown', function (e) {
-      if (e.keyCode === ENTER_KEY_CODE) {
+    galleryCloseBtn.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ENTER_KEY_CODE) {
         galleryOverlay.classList.add('invisible');
       }
-    })
+    });
   };
 })();

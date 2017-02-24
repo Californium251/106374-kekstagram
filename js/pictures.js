@@ -14,15 +14,15 @@ window.load(picturesUrl, function (evt) {
   var pictures = JSON.parse(evt.target.response);
 
   function addListener(el, i) {
-    el.addEventListener('click', function (e) {
-      e.preventDefault();
+    el.addEventListener('click', function (evt) {
+      evt.preventDefault();
       window.showGallery(pictures, i);
     });
-    el.addEventListener('keydown', function (e) {
-      if (e.keyCode === ENTER_KEY_CODE) {
+    el.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ENTER_KEY_CODE) {
         window.showGallery(pictures, i);
       }
-    })
+    });
   }
 
   for (var i = 0; i < pictures.length; i++) {
