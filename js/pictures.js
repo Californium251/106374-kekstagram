@@ -11,7 +11,9 @@ var picturesUrl = 'https://intensive-javascript-server-myophkugvq.now.sh/kekstag
 var onePicture;
 var filtersField = document.querySelector('form.filters');
 var filters = {
-  popular: filtersField.querySelector('[for=filter-discussed]')
+  popular: filtersField.querySelector('[for=filter-popular]'),
+  new: filtersField.querySelector('[for=filter-new]'),
+  discussed: filtersField.querySelector('[for=filter-discussed]')
 };
 
 window.load(picturesUrl, function (evt) {
@@ -46,9 +48,35 @@ window.load(picturesUrl, function (evt) {
 
   filtersField.classList.remove('hidden');
   filters.popular.addEventListener('click', function () {
-    changeOrder(allPictures, picturesContainer);
+    changeOrderPopular(allPictures, picturesContainer);
   });
-  function changeOrder(arr, container) {
+  filters.new.addEventListener('click', function () {
+    changeOrderNew(allPictures, picturesContainer);
+  });
+  filters.discussed.addEventListener('click', function () {
+    changeOrderDiscussed(allPictures, picturesContainer);
+  });
+  function changeOrderPopular(arr, container) {
+    arr.sort(function (a, b) {
+      return a.orderNumber - b.orderNumber;
+    });
+    for (var k = 0; k < arr.length; k++) {
+      container.appendChild(arr[k]);
+    }
+  }
+  function changeOrderNew(arr, container) {
+    for (var n = 0; n < arr.length; n++) {
+      container.removeChild(arr[n]);
+    }
+    arr.sort(function (a, b) {
+      return Math.random() - 0.5;
+    });
+    arr.slice(0, 9);
+    for (var m = 0; m < arr.length; m++) {
+      container.appendChild(arr[m]);
+    }
+  }
+  function changeOrderDiscussed(arr, container) {
     arr.sort(function (a, b) {
       return a.commentsLength - b.commentsLength;
     });
