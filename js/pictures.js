@@ -29,30 +29,28 @@ window.load(picturesUrl, function (evt) {
       }
     });
   }
-
-  var allPictures = [];
+  var pictureArray = [];
   for (var i = 0; i < pictures.length; i++) {
-    allPictures[i] = templateContent.cloneNode(true);
-    allPictures[i].orderNumber = i;
-    allPictures[i].commentsLength = pictures[i].comments.length;
-    allPictures[i].likes = pictures[i].likes;
-    allPictures[i].querySelector('img').setAttribute('src', pictures[i].url);
-    allPictures[i].querySelector('.picture-stat.picture-likes').insertAdjacentHTML('beforeend', pictures[i].likes);
-    allPictures[i].querySelector('.picture-stat.picture-comments').insertAdjacentHTML('beforeend', pictures[i].comments.length);
-    allPictures[i].querySelector('img').setAttribute('tabindex', '0');
-    addListener(allPictures[i].querySelector('img'), i);
-    allPictures.push(allPictures[i]);
-    picturesContainer.appendChild(allPictures[i]);
+    var pictureFrame = templateContent.querySelector('a').cloneNode(true);
+    pictureFrame.orderNumber = i;
+    pictureFrame.commentsLength = pictures[i].comments.length;
+    pictureFrame.likes = pictures[i].likes;
+    pictureFrame.querySelector('img').setAttribute('src', pictures[i].url);
+    pictureFrame.querySelector('.picture-stat.picture-likes').insertAdjacentHTML('beforeend', pictures[i].likes);
+    pictureFrame.querySelector('.picture-stat.picture-comments').insertAdjacentHTML('beforeend', pictures[i].comments.length);
+    pictureArray.push(pictureFrame);
+    addListener(pictureFrame, i);
+    picturesContainer.appendChild(pictureFrame);
   }
   filtersField.classList.remove('hidden');
   filters.popular.addEventListener('click', function () {
-    changeOrderPopular(allPictures, picturesContainer);
+    changeOrderPopular(pictureArray, picturesContainer);
   });
   filters.new.addEventListener('click', function () {
-    changeOrderNew(allPictures, picturesContainer);
+    changeOrderNew(pictureArray, picturesContainer);
   });
   filters.discussed.addEventListener('click', function () {
-    changeOrderDiscussed(allPictures, picturesContainer);
+    changeOrderDiscussed(pictureArray, picturesContainer);
   });
   function changeOrderPopular(arr, container) {
     arr.sort(function (a, b) {
@@ -69,14 +67,14 @@ window.load(picturesUrl, function (evt) {
     arr.sort(function (a, b) {
       return Math.random() - 0.5;
     });
-    arr.slice(0, 9);
+    arr = arr.slice(0, 10);
     for (var m = 0; m < arr.length; m++) {
       container.appendChild(arr[m]);
     }
   }
   function changeOrderDiscussed(arr, container) {
     arr.sort(function (a, b) {
-      return a.commentsLength - b.commentsLength;
+      return b.commentsLength - a.commentsLength;
     });
     for (var j = 0; j < arr.length; j++) {
       container.appendChild(arr[j]);
