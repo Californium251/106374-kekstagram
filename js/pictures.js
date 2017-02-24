@@ -8,7 +8,6 @@ var picturesContainer = document.querySelector('.pictures.container');
 var template = document.querySelector('template');
 var templateContent = 'content' in template ? template.content : template;
 var picturesUrl = 'https://intensive-javascript-server-myophkugvq.now.sh/kekstagram/data';
-var onePicture;
 var filtersField = document.querySelector('form.filters');
 var filters = {
   popular: filtersField.querySelector('[for=filter-popular]'),
@@ -33,19 +32,18 @@ window.load(picturesUrl, function (evt) {
 
   var allPictures = [];
   for (var i = 0; i < pictures.length; i++) {
-    onePicture = templateContent.cloneNode(true);
-    onePicture.orderNumber = i;
-    onePicture.commentsLength = pictures[i].comments.length;
-    onePicture.likes = pictures[i].likes;
-    onePicture.querySelector('img').setAttribute('src', pictures[i].url);
-    onePicture.querySelector('.picture-stat.picture-likes').insertAdjacentHTML('beforeend', pictures[i].likes);
-    onePicture.querySelector('.picture-stat.picture-comments').insertAdjacentHTML('beforeend', pictures[i].comments.length);
-    onePicture.querySelector('img').setAttribute('tabindex', '0');
-    addListener(onePicture.querySelector('img'), i);
-    allPictures.push(onePicture);
-    picturesContainer.appendChild(onePicture);
+    allPictures[i] = templateContent.cloneNode(true);
+    allPictures[i].orderNumber = i;
+    allPictures[i].commentsLength = pictures[i].comments.length;
+    allPictures[i].likes = pictures[i].likes;
+    allPictures[i].querySelector('img').setAttribute('src', pictures[i].url);
+    allPictures[i].querySelector('.picture-stat.picture-likes').insertAdjacentHTML('beforeend', pictures[i].likes);
+    allPictures[i].querySelector('.picture-stat.picture-comments').insertAdjacentHTML('beforeend', pictures[i].comments.length);
+    allPictures[i].querySelector('img').setAttribute('tabindex', '0');
+    addListener(allPictures[i].querySelector('img'), i);
+    allPictures.push(allPictures[i]);
+    picturesContainer.appendChild(allPictures[i]);
   }
-
   filtersField.classList.remove('hidden');
   filters.popular.addEventListener('click', function () {
     changeOrderPopular(allPictures, picturesContainer);
