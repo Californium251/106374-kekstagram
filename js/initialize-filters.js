@@ -3,13 +3,15 @@
  */
 'use strict';
 
-window.initializeFlters = (function () {
+window.initializeFilters = (function () {
   var ENTER_KEY_CODE = 13;
+  var i;
+
   function getFilterList(filterNode) {
     var filterNodes = filterNode.querySelectorAll('input');
     var filtersArr = [];
 
-    for (var i = 0; i < filterNodes.length; i++) {
+    for (i = 0; i < filterNodes.length; i++) {
       filtersArr.push(getFilterClass(filterNodes[i]));
     }
     return filtersArr;
@@ -28,7 +30,7 @@ window.initializeFlters = (function () {
   }
 
   function removeAllFilters(filterList, photoElem) {
-    for (var i = 0; i < filterList.length; i++) {
+    for (i = 0; i < filterList.length; i++) {
       photoElem.classList.toggle(filterList[i], false);
     }
   }

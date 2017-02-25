@@ -133,6 +133,16 @@ body {
           filter: invert(100%);
 }
 
+.upload-filter-label-phobos .upload-filter-preview, .filter-phobos {
+  -webkit-filter: brightness(1.4) hue-rotate(60deg);
+          filter: brightness(1.4) hue-rotate(60deg);
+}
+
+.upload-filter-label-heat .upload-filter-preview, .filter-heat {
+  -webkit-filter: brightness(1.1) contrast(200%) saturate(150%);
+          filter: brightness(1.1) contrast(200%) saturate(150%);
+}
+
 .upload-input {
   visibility: hidden;
 }

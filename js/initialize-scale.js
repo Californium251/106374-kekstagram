@@ -4,33 +4,33 @@
 
 'use strict';
 
-window.createScale = (function () {
-  var scaleVal = document.querySelector('.upload-resize-controls-value');
+window.initializeScale = (function () {
+  var scaleControlValue = document.querySelector('.upload-resize-controls-value');
   var restrinctions = {
-    min: 0,
+    min: 25,
     max: 100,
-    step: 25
   };
 
-  function getScaleBtnType(btn) {
-    return btn.classList.contains('upload-resize-controls-button-inc') ? 'inc' : 'dec';
+  function getScaleButtonType(button) {
+    return button.classList.contains('upload-resize-controls-button-inc') ? 'inc' : 'dec';
   }
 
-  function changeScale(btnType, scaleValue, minMaxAndStep) {
-    if (btnType === 'inc' && parseInt(scaleValue.value, 10) < minMaxAndStep.max) {
-      scaleVal.value = (parseInt(scaleValue.value, 10) + minMaxAndStep.step) + '%';
+  function changeScale(buttonType, scaleValue, minAndMax, step) {
+    if (buttonType === 'inc' && parseInt(scaleValue.value, 10) < minAndMax.max) {
+      scaleControlValue.value = (parseInt(scaleValue.value, 10) + step) + '%';
     }
-    if (btnType === 'dec' && parseInt(scaleValue.value, 10) > minMaxAndStep.min) {
-      scaleVal.value = (parseInt(scaleValue.value, 10) - minMaxAndStep.step) + '%';
+    if (buttonType === 'dec' && parseInt(scaleValue.value, 10) > minAndMax.min) {
+      scaleControlValue.value = (parseInt(scaleValue.value, 10) - step) + '%';
     }
   }
 
-  return function (scaleField, photoPreview, callback) {
+  return function (scaleField, defaultValue, step, photoPreview, callback) {
+    scaleControlValue.value = defaultValue + '%';
     scaleField.addEventListener('click', function (evt) {
       if (evt.target.tagName === 'BUTTON') {
-        changeScale(getScaleBtnType(evt.target), scaleVal, restrinctions);
+        changeScale(getScaleButtonType(evt.target), scaleControlValue, restrinctions, step);
         if (typeof callback === 'function') {
-          var parsedScale = parseInt(scaleVal.value, 10) / 100;
+          var parsedScale = parseInt(scaleControlValue.value, 10) / 100;
           callback(parsedScale);
         }
       }
