@@ -8,6 +8,7 @@
   var picturesContainer = document.querySelector('.pictures.container');
   var template = document.querySelector('template');
   var templateContent = 'content' in template ? template.content : template;
+  var pictureTemplate = templateContent.querySelector('a');
   var picturesUrl = 'https://intensive-javascript-server-myophkugvq.now.sh/kekstagram/data';
   var filtersField = document.querySelector('form.filters');
   var pictureArray = [];
@@ -18,9 +19,8 @@
   };
   var i;
 
-  window.load(picturesUrl, function (evt) {
-    var pictures = JSON.parse(evt.target.response);
-    var picturesArryLength = pictures.length;
+  window.load(picturesUrl, function (pictures) {
+    var picturesArrayLength = pictures.length;
 
     function addListener(el, j) {
       el.addEventListener('click', function (event) {
@@ -34,44 +34,9 @@
       });
     }
 
-    function changePhotoOrder(photoArray, filter, container) {
-      var arrayForSort = photoArray.slice(0, photoArray.length);
-      var arrayForSortLength = arrayForSort.length;
-      var numberOfPictures = filter === 'new' ? 10 : photoArray.length;
-
-      arrayForSort.sort(function (prevPhoto, nextPhoto) {
-        var sortOrder;
-
-        switch (filter) {
-          case 'popular':
-            sortOrder = prevPhoto.orderNumber - nextPhoto.orderNumber;
-            break;
-          case 'new':
-            sortOrder = Math.random() - 0.5;
-            break;
-          case 'discussed':
-            sortOrder = nextPhoto.commentsLength - prevPhoto.commentsLength;
-            break;
-          default:
-            sortOrder = 1;
-        }
-        return sortOrder;
-      });
-
-      for (i = 0; i < arrayForSortLength; i++) {
-        if (i < numberOfPictures) {
-          container.appendChild(arrayForSort[i]);
-        } else {
-          if (container.contains(arrayForSort[i])) {
-            container.removeChild(arrayForSort[i]);
-          }
-        }
-      }
-    }
-
-    for (i = 0; i < picturesArryLength; i++) {
-      var pictureFrame = templateContent.querySelector('a').cloneNode(true);
+    for (i = 0; i < picturesArrayLength; i++) {
       var pictureFrameCommentsLength = pictures[i].comments.length;
+      var pictureFrame = pictureTemplate.cloneNode(true);
       pictureFrame.orderNumber = i;
       pictureFrame.commentsLength = pictureFrameCommentsLength;
       pictureFrame.likes = pictures[i].likes;
@@ -85,13 +50,28 @@
 
     filtersField.classList.remove('hidden');
     filters.popular.addEventListener('click', function () {
-      changePhotoOrder(pictureArray, 'popular', picturesContainer);
+      window.changePhotoOrder(pictureArray, 'popular', picturesContainer);
     });
     filters.new.addEventListener('click', function () {
-      changePhotoOrder(pictureArray, 'new', picturesContainer);
+      window.changePhotoOrder(pictureArray, 'new', picturesContainer);
     });
     filters.discussed.addEventListener('click', function () {
-      changePhotoOrder(pictureArray, 'discussed', picturesContainer);
+      window.changePhotoOrder(pictureArray, 'discussed', picturesContainer);
+    });
+    filters.popular.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ENTER_KEY_CODE) {
+        window.changePhotoOrder(pictureArray, 'popular', picturesContainer);
+      }
+    });
+    filters.new.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ENTER_KEY_CODE) {
+        window.changePhotoOrder(pictureArray, 'new', picturesContainer);
+      }
+    });
+    filters.discussed.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ENTER_KEY_CODE) {
+        window.changePhotoOrder(pictureArray, 'discussed', picturesContainer);
+      }
     });
   });
 })();
