@@ -25,11 +25,11 @@
     }
   }
 
-  function setNewFilter(targetFilter) {
+  function setNewFilterCallback(targetFilter) {
     photoPreview.classList.add(targetFilter);
   }
 
-  function setScale(scaleValue) {
+  function setScaleCallback(scaleValue) {
     photoPreview.style.transform = 'scale(' + scaleValue + ')';
   }
 
@@ -55,6 +55,6 @@
     showAndHide(uploadForm, uploadOverlay, callback);
   });
 
-  window.initializeFilters(allFilters, photoPreview, setNewFilter);
-  window.initializeScale(scaleField, defaultScale, scaleStep, photoPreview, setScale);
+  window.initializeFilters(allFilters, photoPreview, setNewFilterCallback);
+  window.initializeScale(scaleField, defaultScale, scaleStep, photoPreview, setScaleCallback);
 })();

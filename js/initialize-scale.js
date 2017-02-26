@@ -8,7 +8,7 @@ window.initializeScale = (function () {
   var scaleControlValue = document.querySelector('.upload-resize-controls-value');
   var restrinctions = {
     min: 25,
-    max: 100,
+    max: 100
   };
 
   function getScaleButtonType(button) {
