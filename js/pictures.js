@@ -5,7 +5,6 @@
 
 (function () {
   var ENTER_KEY_CODE = 13;
-  var i;
   var picturesContainer = document.querySelector('.pictures.container');
   var template = document.querySelector('template');
   var templateContent = 'content' in template ? template.content : template;
@@ -17,6 +16,7 @@
     new: filtersField.querySelector('[for=filter-new]'),
     discussed: filtersField.querySelector('[for=filter-discussed]')
   };
+  var i;
 
   window.load(picturesUrl, function (evt) {
     var pictures = JSON.parse(evt.target.response);
