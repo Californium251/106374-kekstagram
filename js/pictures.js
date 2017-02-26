@@ -20,6 +20,7 @@
 
   window.load(picturesUrl, function (evt) {
     var pictures = JSON.parse(evt.target.response);
+    var picturesArryLength = pictures.length;
 
     function addListener(el, j) {
       el.addEventListener('click', function (event) {
@@ -35,6 +36,7 @@
 
     function changePhotoOrder(photoArray, filter, container) {
       var arrayForSort = photoArray.slice(0, photoArray.length);
+      var arrayForSortLength = arrayForSort.length;
       var numberOfPictures = filter === 'new' ? 10 : photoArray.length;
 
       arrayForSort.sort(function (prevPhoto, nextPhoto) {
@@ -56,7 +58,7 @@
         return sortOrder;
       });
 
-      for (i = 0; i < arrayForSort.length; i++) {
+      for (i = 0; i < arrayForSortLength; i++) {
         if (i < numberOfPictures) {
           container.appendChild(arrayForSort[i]);
         } else {
@@ -67,7 +69,7 @@
       }
     }
 
-    for (i = 0; i < pictures.length; i++) {
+    for (i = 0; i < picturesArryLength; i++) {
       var pictureFrame = templateContent.querySelector('a').cloneNode(true);
       var pictureFrameCommentsLength = pictures[i].comments.length;
       pictureFrame.orderNumber = i;
