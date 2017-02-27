@@ -6,6 +6,8 @@
 window.initializeFilters = (function () {
   var ENTER_KEY_CODE = 13;
   var i;
+  var filterLevel = document.querySelector('.upload-filter-level');
+  var filterLevelPin = filterLevel.querySelector('.upload-filter-level-pin');
 
   function getFilterList(filterNode) {
     var filterNodes = filterNode.querySelectorAll('input');
@@ -20,6 +22,7 @@ window.initializeFilters = (function () {
 
   function getFilterClass(htmlNode) {
     var whatIsToBeReturned = '';
+
     var FILTER_PREFIX = 'filter-';
     if (htmlNode.tagName === 'INPUT') {
       whatIsToBeReturned = FILTER_PREFIX + htmlNode.value;
@@ -40,7 +43,14 @@ window.initializeFilters = (function () {
   function removeAndSetNewFilter(evt, filterPath, photoElement, callback) {
     removeAllFilters(getFilterList(filterPath), photoElement);
     if (typeof callback === 'function') {
-      callback(getFilterClass(evt.target));
+      var currentFilter = getFilterClass(evt.target);
+      if (currentFilter === 'filter-none') {
+        filterLevel.classList.toggle('invisible', true);
+      } else {
+        filterLevel.classList.toggle('invisible', false);
+      }
+
+      callback(currentFilter);
     }
   }
 
@@ -57,6 +67,18 @@ window.initializeFilters = (function () {
   }
 
   return function (filterPath, photoElement, callback) {
+    filterLevelPin.addEventListener('mouseDown', function (downEvt) {
+      downEvt.preventDefault();
+
+      var startPoint = downEvt.clientX;
+
+      document.addEventListener('mouseMove', function (mouseEvt) {
+        mouseEvt.preventDefault();
+
+        var shift = startPoint - mouseEvt.clientX;
+        filterLevelPin.style.left -= shift + 'px';
+      });
+    });
     filterPath.addEventListener('click', function (evt) {
       changeFilterOnClick(evt, filterPath, photoElement, callback);
     });
