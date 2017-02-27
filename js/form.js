@@ -33,6 +33,13 @@
     photoPreview.style.transform = 'scale(' + scaleValue + ')';
   }
 
+  function onCloseAfterKeyboardInitiation() {
+    if (activeElement) {
+      activeElement.focus();
+      activeElement = null;
+    }
+  }
+
   changeFormButton.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEY_CODE) {
       activeElement = document.activeElement;
@@ -46,13 +53,7 @@
 
   uploadFormCancel.addEventListener('click', function () {
     uploadPhotoInput.value = '';
-    function callback() {
-      if (activeElement) {
-        activeElement.focus();
-        activeElement = null;
-      }
-    }
-    showAndHide(uploadForm, uploadOverlay, callback);
+    showAndHide(uploadForm, uploadOverlay, onCloseAfterKeyboardInitiation);
   });
 
   window.initializeFilters(allFilters, photoPreview, setNewFilterCallback);

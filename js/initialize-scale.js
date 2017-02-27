@@ -16,11 +16,12 @@ window.initializeScale = (function () {
   }
 
   function changeScale(buttonType, scaleValue, minAndMax, step) {
-    if (buttonType === 'inc' && parseInt(scaleValue.value, 10) < minAndMax.max) {
-      scaleControlValue.value = (parseInt(scaleValue.value, 10) + step) + '%';
+    var intScaleValue = parseInt(scaleValue.value, 10);
+    if (buttonType === 'inc' && intScaleValue < minAndMax.max) {
+      scaleControlValue.value = (intScaleValue + step) + '%';
     }
-    if (buttonType === 'dec' && parseInt(scaleValue.value, 10) > minAndMax.min) {
-      scaleControlValue.value = (parseInt(scaleValue.value, 10) - step) + '%';
+    if (buttonType === 'dec' && intScaleValue > minAndMax.min) {
+      scaleControlValue.value = (intScaleValue - step) + '%';
     }
   }
 
@@ -30,7 +31,7 @@ window.initializeScale = (function () {
       if (evt.target.tagName === 'BUTTON') {
         changeScale(getScaleButtonType(evt.target), scaleControlValue, restrinctions, step);
         if (typeof callback === 'function') {
-          var parsedScale = parseInt(scaleControlValue.value, 10) / 100;
+          var parsedScale = parseInt(scaleControlValue.value, 10) / restrinctions.max;
           callback(parsedScale);
         }
       }

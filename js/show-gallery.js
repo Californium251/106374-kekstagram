@@ -12,10 +12,11 @@ window.showGallery = (function () {
   var galleryCloseButton = galleryOverlay.querySelector('.gallery-overlay-close');
 
   return function (pictures, i) {
+    var picture = pictures[i];
     galleryOverlay.classList.remove('invisible');
-    galleryImg.setAttribute('src', pictures[i].url);
-    galleryLikes.innerHTML = pictures[i].likes;
-    galleryComments.innerHTML = pictures[i].comments.length;
+    galleryImg.setAttribute('src', picture.url);
+    galleryLikes.innerHTML = picture.likes;
+    galleryComments.innerHTML = picture.comments.length;
     galleryCloseButton.focus();
     galleryCloseButton.addEventListener('click', function () {
       galleryOverlay.classList.add('invisible');
