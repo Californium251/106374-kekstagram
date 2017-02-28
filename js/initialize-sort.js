@@ -5,9 +5,10 @@
 
 window.changePhotoOrder = (function () {
   return function (photoArray, filter, container) {
+    var NUMBER_OF_PICTURES_FOR_FILTER_NEW = 10;
     var arrayForSort = photoArray.slice(0, photoArray.length);
     var arrayForSortLength = arrayForSort.length;
-    var numberOfPictures = filter === 'new' ? 10 : photoArray.length;
+    var numberOfPictures = filter === 'new' ? NUMBER_OF_PICTURES_FOR_FILTER_NEW : photoArray.length;
     var i;
 
     arrayForSort.sort(function (prevPhoto, nextPhoto) {
